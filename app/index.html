@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uma Musume Index</title>
+  <title>Mambo.horse</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,10 +12,10 @@
     <div class="nav-left">
       <a class="brand" href="#">
         <span class="brand-mark">UM</span>
-        <span class="brand-text">Uma Musume Index</span>
+        <span class="brand-text">Mambo.horse</span>
       </a>
       <nav class="nav-links">
-        <a href="#" class="active">Horses</a>
+        <a href="#" class="active">Umas</a>
         <a href="#">Teams</a>
         <a href="#">Guides</a>
         <a href="#">About</a>
@@ -24,12 +24,15 @@
 
     <div class="nav-right">
       <div class="search-wrap">
-        <input id="searchInput" type="search" placeholder="Search horses..." autocomplete="off" />
+        <input id="searchInput" type="search" placeholder="Search umas..." autocomplete="off" />
       </div>
+      <button id = "filtersToggle" class = "btn ghost" type = button>Filters</button>
       <button id="themeToggle" class="btn ghost" type="button" aria-label="Toggle theme">Theme</button>
       <button class="btn" type="button">Sign In</button>
     </div>
   </header>
+
+  <div id="sidebarOverlay" class="overlay hidden" aria-hidden="true"></div>
 
   <!-- MAIN LAYOUT -->
   <div class="page">
@@ -95,7 +98,7 @@
 
       <div class="panel">
         <h2 class="panel-title">Stats (placeholder)</h2>
-        <p class="muted">Total horses: <span id="countAll">0</span></p>
+        <p class="muted">Total umas: <span id="countAll">0</span></p>
         <p class="muted">Showing: <span id="countShown">0</span></p>
       </div>
     </aside>
@@ -118,7 +121,7 @@
       </section>
 
       <footer class="footer">
-        <span class="muted">Uma Musume Index — fan-made template (base)</span>
+        <span class="muted">Mambo.horse — fan-made template (base)</span>
       </footer>
     </main>
   </div>

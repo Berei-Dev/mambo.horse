@@ -20,6 +20,15 @@ const countShown = document.getElementById("countShown");
 const rarityChecks = Array.from(document.querySelectorAll(".rarityCheck"));
 const distanceChecks = Array.from(document.querySelectorAll(".distanceCheck"));
 
+const filtersToggle = document.getElementById("filtersToggle");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+const sidebar = document.querySelector(".sidebar"); // <--- add this
+
+sidebar.addEventListener("click", (e) => {
+  e.stopPropagation();
+});
+
 // Modal
 const addHorseBtn = document.getElementById("addHorseBtn");
 const modalBackdrop = document.getElementById("modalBackdrop");
@@ -195,6 +204,58 @@ document.addEventListener("keydown", (e) => {
 themeToggle.addEventListener("click", () => {
   document.documentElement.classList.toggle("light");
 });
+function setDefaultFiltersState() {
+  const isMobile = window.matchMedia("(max-width: 980px)").matches;
+
+  // Desktop default: open. Mobile default: closed.
+  if (isMobile) document.body.classList.remove("filters-open");
+  else document.body.classList.add("filters-open");
+}
+
+function isMobile() {
+  return window.matchMedia("(max-width: 980px)").matches;
+}
+
+function closeFilters() {
+  document.body.classList.remove("filters-open");
+  sidebarOverlay.classList.add("hidden");
+  sidebarOverlay.setAttribute("aria-hidden", "true");
+}
+
+function openFilters() {
+  document.body.classList.add("filters-open");
+
+  // Only show overlay on mobile
+  if (isMobile()) {
+    sidebarOverlay.classList.remove("hidden");
+    sidebarOverlay.setAttribute("aria-hidden", "false");
+  } else {
+    sidebarOverlay.classList.add("hidden");
+    sidebarOverlay.setAttribute("aria-hidden", "true");
+  }
+}
+
+function toggleFilters() {
+  const isOpen = document.body.classList.contains("filters-open");
+  if (isOpen) closeFilters();
+  else openFilters();
+}
+
+filtersToggle.addEventListener("click", toggleFilters);
+sidebarOverlay.addEventListener("click", closeFilters);
+
+window.addEventListener("resize", () => {
+  // on resize, re-apply default rules and keep overlay correct
+  setDefaultFiltersState();
+  const isOpen = document.body.classList.contains("filters-open");
+  if (isOpen && window.matchMedia("(max-width: 980px)").matches) openFilters();
+  else closeFilters();
+});
+
+// run on load
+setDefaultFiltersState();
+closeFilters(); // ensures overlay starts hidden
+
 
 // ---- Init ----
 render();
