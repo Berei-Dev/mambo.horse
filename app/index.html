@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uma Musume Index</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <a class="brand" href="#">
+        <span class="brand-mark">UM</span>
+        <span class="brand-text">Uma Musume Index</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#" class="active">Horses</a>
+        <a href="#">Teams</a>
+        <a href="#">Guides</a>
+        <a href="#">About</a>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <div class="search-wrap">
+        <input id="searchInput" type="search" placeholder="Search horses..." autocomplete="off" />
+      </div>
+      <button id="themeToggle" class="btn ghost" type="button" aria-label="Toggle theme">Theme</button>
+      <button class="btn" type="button">Sign In</button>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="panel">
+        <h2 class="panel-title">Filters</h2>
+
+        <label class="field">
+          <span class="field-label">Sort by</span>
+          <select id="sortSelect">
+            <option value="name-asc">Name (A → Z)</option>
+            <option value="name-desc">Name (Z → A)</option>
+            <option value="rarity-desc">Rarity (High → Low)</option>
+            <option value="rarity-asc">Rarity (Low → High)</option>
+          </select>
+        </label>
+
+        <div class="divider"></div>
+
+        <div class="field">
+          <span class="field-label">Rarity</span>
+          <div class="chips">
+            <label class="chip">
+              <input type="checkbox" value="3" class="rarityCheck" checked />
+              <span>★★★</span>
+            </label>
+            <label class="chip">
+              <input type="checkbox" value="2" class="rarityCheck" checked />
+              <span>★★</span>
+            </label>
+            <label class="chip">
+              <input type="checkbox" value="1" class="rarityCheck" checked />
+              <span>★</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Distance</span>
+          <div class="chips">
+            <label class="chip">
+              <input type="checkbox" value="Sprint" class="distanceCheck" checked />
+              <span>Sprint</span>
+            </label>
+            <label class="chip">
+              <input type="checkbox" value="Mile" class="distanceCheck" checked />
+              <span>Mile</span>
+            </label>
+            <label class="chip">
+              <input type="checkbox" value="Middle" class="distanceCheck" checked />
+              <span>Middle</span>
+            </label>
+            <label class="chip">
+              <input type="checkbox" value="Long" class="distanceCheck" checked />
+              <span>Long</span>
+            </label>
+          </div>
+        </div>
+
+        <button id="clearFilters" class="btn ghost full" type="button">Clear Filters</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Stats (placeholder)</h2>
+        <p class="muted">Total horses: <span id="countAll">0</span></p>
+        <p class="muted">Showing: <span id="countShown">0</span></p>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+      <section class="content-head">
+        <div>
+          <h1>Horse Index</h1>
+          <p class="muted">Base homepage template — swap placeholders with your real Uma data.</p>
+        </div>
+
+        <div class="actions">
+          <button id="addHorseBtn" class="btn" type="button">+ Add Horse</button>
+        </div>
+      </section>
+
+      <section class="grid-wrap">
+        <div id="horseGrid" class="grid"></div>
+      </section>
+
+      <footer class="footer">
+        <span class="muted">Uma Musume Index — fan-made template (base)</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- SIMPLE MODAL -->
+  <div id="modalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h3 id="modalTitle">Add Horse (placeholder)</h3>
+        <button id="closeModal" class="icon-btn" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted">
+          This is just a placeholder modal so your site already feels like an app.
+          Later you can add a form here.
+        </p>
+      </div>
+      <div class="modal-foot">
+        <button id="closeModal2" class="btn ghost" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
