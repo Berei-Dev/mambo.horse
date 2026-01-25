@@ -1,23 +1,27 @@
 // ---- Data & State ----
 const horses = [
-  { id: 1, name: "Special Week", rarity: 3, distance: "Middle", role: "Runner" },
-  { id: 2, name: "Silence Suzuka", rarity: 3, distance: "Mile", role: "Front" },
-  { id: 3, name: "Tokai Teio", rarity: 3, distance: "Middle", role: "Betweener" },
-  { id: 4, name: "Oguri Cap", rarity: 3, distance: "Mile", role: "Chaser" },
-  { id: 5, name: "Haru Urara", rarity: 1, distance: "Sprint", role: "Runner" },
-  { id: 6, name: "Mejiro McQueen", rarity: 2, distance: "Long", role: "Front" }
+  { id: 1, name: "Special Week", slug: "special_week", rarity: 3, distance: "Medium", role: "Runner", track: "Turf" },
+  { id: 101, name: "Special Week (Summer)", slug: "special_week", rarity: 3, distance: "Middle", role: "Runner", track: "Turf"},
+  { id: 2, name: "Silence Suzuka", slug: "silence_suzuka", rarity: 3, distance: "Mile", role: "Front", track: "Turf" },
+  { id: 3, name: "Tokai Teio", slug: "tokai_teio", rarity: 3, distance: "Medium", role: "Betweener", track: "Turf" },
+  { id: 4, name: "Oguri Cap", slug: "oguri_cap", rarity: 3, distance: "Mile", role: "Chaser", track: "Both" },
+  { id: 5, name: "Haru Urara", slug: "haru_urara", rarity: 1, distance: "Sprint", role: "Runner", track: "Dirt" },
+  { id: 6, name: "Mejiro McQueen", slug: "mejiro_mcqueen", rarity: 2, distance: "Long", role: "Front", track: "Turf" }
 ];
 
 let state = {
   q: "",
   sort: "name-asc",
   rarities: new Set(["1", "2", "3"]),
-  distances: new Set(["Sprint", "Mile", "Middle", "Long"])
+  distances: new Set(["Sprint", "Mile", "Medium", "Long"])
 };
+
+// ---- Favorite Storage Helpers ----
+const getFavorites = () => JSON.parse(localStorage.getItem("mambo_favs") || "[]");
+const saveFavorites = (favs) => localStorage.setItem("mambo_favs", JSON.stringify(favs));
 
 // ---- Core Logic Function ----
 async function init() {
-  // 1. Load the Header
   const headerContainer = document.getElementById("mainHeader");
   if (headerContainer) {
     const response = await fetch("header.html");
@@ -25,11 +29,9 @@ async function init() {
     headerContainer.innerHTML = html;
   }
 
-  // 2. Select Elements (Must happen after header is injected)
   const grid = document.getElementById("horseGrid");
   const searchInput = document.getElementById("searchInput");
   const sortSelect = document.getElementById("sortSelect");
-  const clearFiltersBtn = document.getElementById("clearFilters");
   const countAll = document.getElementById("countAll");
   const countShown = document.getElementById("countShown");
   const rarityChecks = Array.from(document.querySelectorAll(".rarityCheck"));
@@ -37,17 +39,18 @@ async function init() {
   const filtersToggle = document.getElementById("filtersToggle");
   const sidebarOverlay = document.getElementById("sidebarOverlay");
   const themeToggle = document.getElementById("themeToggle");
-  const addHorseBtn = document.getElementById("addHorseBtn");
+  //const addHorseBtn = document.getElementById("addHorseBtn");
   const modalBackdrop = document.getElementById("modalBackdrop");
   const closeModal = document.getElementById("closeModal");
   const closeModal2 = document.getElementById("closeModal2");
 
-  // ---- Helper Functions ----
   const rarityStars = (n) => "★".repeat(n);
   const initials = (name) => name.split(" ").filter(Boolean).slice(0, 2).map(s => s[0].toUpperCase()).join("");
 
   function render() {
+    const favorites = getFavorites();
     countAll.textContent = String(horses.length);
+
     const filtered = horses
       .filter(h => {
         const qMatch = !state.q || h.name.toLowerCase().includes(state.q.toLowerCase());
@@ -61,31 +64,61 @@ async function init() {
       });
 
     countShown.textContent = String(filtered.length);
-    grid.innerHTML = filtered.map(h => `
-      <article class="card" data-id="${h.id}">
-        <div class="avatar">${initials(h.name)}</div>
-        <div class="card-body">
-          <div class="card-title">
-            <h3>${h.name}</h3>
-            <div class="badges">
-              <span class="badge good">${rarityStars(h.rarity)}</span>
-              <span class="badge">${h.distance}</span>
-            </div>
-          </div>
-          <div class="card-meta"><span>Role: ${h.role}</span> • <span>ID: ${h.id}</span></div>
-          <div class="card-actions">
-            <button class="icon-btn viewBtn">View</button>
-            <button class="icon-btn favBtn">☆ Favorite</button>
-          </div>
-        </div>
-      </article>
-    `).join("");
 
-    // Re-attach card listeners
-    grid.querySelectorAll(".viewBtn").forEach(btn => {
+    grid.innerHTML = filtered.map(h => {
+  const isFav = favorites.includes(h.id);
+  const charUrl = `/characters/${h.slug}/${h.slug}.html`;
+  // Construct the image path using the slug
+  const imgUrl = `/characters/${h.slug}/${h.slug}.png`; 
+
+  return `
+    <div class="card-container">
+      <a href="${charUrl}" class="card-link">
+        <article class="card">
+          <div class="avatar">
+            <img src="${imgUrl}" alt="${h.name}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
+          </div>
+          <div class="card-body">
+            ...
+                <div class="card-title">
+                  <h3>${h.name}</h3>
+                  <div class="badges">
+                    <span class="badge good">${rarityStars(h.rarity)}</span>
+                    <span class="badge">${h.distance}</span>
+                  </div>
+                </div>
+                <div class="card-meta">
+                  <span>Role: ${h.role}</span> • <span>Distance: ${h.distance}</span>  • <span>Distance: ${h.track}</span>
+                </div>
+                <div class="card-actions">
+                   <span class="btn-fake">View Details</span>
+                </div>
+              </div>
+            </article>
+          </a>
+          <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${h.id}" aria-label="Favorite">
+            ${isFav ? '★' : '☆'}
+          </button>
+        </div>
+      `;
+    }).join("");
+
+    // Re-attach Favorite Click Listeners
+    grid.querySelectorAll(".fav-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
-        const id = e.target.closest(".card").dataset.id;
-        alert("Navigating to ID: " + id);
+        e.preventDefault(); // Stop link navigation
+        e.stopPropagation(); // Stop event bubbling
+        const id = parseInt(btn.dataset.id);
+        let currentFavs = getFavorites();
+        
+        if (currentFavs.includes(id)) {
+          currentFavs = currentFavs.filter(favId => favId !== id);
+        } else {
+          currentFavs.push(id);
+        }
+        
+        saveFavorites(currentFavs);
+        render(); // Refresh the grid to show new star state
       });
     });
   }
@@ -93,7 +126,7 @@ async function init() {
   // ---- Event Listeners ----
   searchInput.addEventListener("input", (e) => { state.q = e.target.value; render(); });
   sortSelect.addEventListener("change", (e) => { state.sort = e.target.value; render(); });
-  
+
   [...rarityChecks, ...distanceChecks].forEach(chk => {
     chk.addEventListener("change", () => {
       const set = chk.classList.contains("rarityCheck") ? state.rarities : state.distances;
@@ -104,7 +137,6 @@ async function init() {
 
   themeToggle.addEventListener("click", () => document.documentElement.classList.toggle("light"));
 
-  // Sidebar / Filter Toggle Logic
   const isMobile = () => window.matchMedia("(max-width: 980px)").matches;
   const toggleFilters = () => {
     const isOpen = document.body.classList.toggle("filters-open");
@@ -118,13 +150,10 @@ async function init() {
   filtersToggle.addEventListener("click", toggleFilters);
   sidebarOverlay.addEventListener("click", toggleFilters);
 
-  // Modal Logic
-  addHorseBtn.addEventListener("click", () => modalBackdrop.classList.remove("hidden"));
+  //addHorseBtn.addEventListener("click", () => modalBackdrop.classList.remove("hidden"));
   [closeModal, closeModal2].forEach(b => b.addEventListener("click", () => modalBackdrop.classList.add("hidden")));
 
-  // Initial Render
   render();
 }
 
-// Start the app
 init();
