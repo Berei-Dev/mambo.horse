@@ -6,30 +6,12 @@
   <title>Tokai Teio — Uma Musume Index</title>
 
   <!-- IMPORTANT: these paths are relative to Teio/Teio.html -->
-  <link rel="stylesheet" href="Teio.css" />
+  <link rel="stylesheet" href="tokai_teio.css" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 
 <body>
-  <header class="navbar">
-    <div class="nav-left">
-      <a class="brand" href="../app/index.html">
-        <span class="brand-mark">UM</span>
-        <span class="brand-text">Mambo.horse</span>
-      </a>
-
-      <nav class="nav-links">
-        <a href="../app/index.html" class="active">Umas</a>
-        <a href="#">Teams</a>
-        <a href="#">Guides</a>
-        <a href="#">About</a>
-      </nav>
-    </div>
-
-    <div class="nav-right">
-      <button id="themeToggle" class="btn ghost" type="button">Theme</button>
-      <button class="btn" type="button">Sign In</button>
-    </div>
-  </header>
+<header id="mainHeader" class="navbar"></header>
 
   <main class="page">
     <section class="panel hero">
@@ -56,7 +38,7 @@
 
           <div class="img-frame">
             <img
-              src="teio.png"
+              src="tokai_teio.png"
               alt="Tokai Teio"
               onerror="this.style.display='none'; document.getElementById('imgFallback').style.display='grid';"
             />
@@ -103,6 +85,6 @@
   </main>
 
   <!-- IMPORTANT: relative to Teio/Teio.html -->
-  <script src="Teio.js"></script>
+  <script src="tokai_teio.js"></script>
 </body>
 </html>

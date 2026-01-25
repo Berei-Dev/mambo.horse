@@ -49,27 +49,6 @@ body{
   gap: 16px;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  text-decoration:none;
-  color: var(--text);
-}
-
-.brand-mark{
-  display:grid;
-  place-items:center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), #06b6d4);
-  font-weight: 800;
-  letter-spacing: .5px;
-}
-
-.brand-text{ font-weight: 700; }
-
 .nav-links{
   display:flex;
   gap: 10px;
