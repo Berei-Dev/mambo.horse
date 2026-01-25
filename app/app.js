@@ -1,261 +1,159 @@
-// ---- Placeholder data (replace later with your real Uma Musume list) ----
+// ---- Data & State ----
 const horses = [
-  { id: 1, name: "Special Week", rarity: 3, distance: "Middle", role: "Runner" },
-  { id: 2, name: "Silence Suzuka", rarity: 3, distance: "Mile", role: "Front" },
-  { id: 3, name: "Tokai Teio", rarity: 3, distance: "Middle", role: "Betweener" },
-  { id: 4, name: "Oguri Cap", rarity: 3, distance: "Mile", role: "Chaser" },
-  { id: 5, name: "Haru Urara", rarity: 1, distance: "Sprint", role: "Runner" },
-  { id: 6, name: "Mejiro McQueen", rarity: 2, distance: "Long", role: "Front" }
+  { id: 1, name: "Special Week", slug: "special_week", rarity: 3, distance: "Medium", role: "Runner", track: "Turf" },
+  { id: 101, name: "Special Week (Summer)", slug: "special_week", rarity: 3, distance: "Middle", role: "Runner", track: "Turf"},
+  { id: 2, name: "Silence Suzuka", slug: "silence_suzuka", rarity: 3, distance: "Mile", role: "Front", track: "Turf" },
+  { id: 3, name: "Tokai Teio", slug: "tokai_teio", rarity: 3, distance: "Medium", role: "Betweener", track: "Turf" },
+  { id: 4, name: "Oguri Cap", slug: "oguri_cap", rarity: 3, distance: "Mile", role: "Chaser", track: "Both" },
+  { id: 5, name: "Haru Urara", slug: "haru_urara", rarity: 1, distance: "Sprint", role: "Runner", track: "Dirt" },
+  { id: 6, name: "Mejiro McQueen", slug: "mejiro_mcqueen", rarity: 2, distance: "Long", role: "Front", track: "Turf" }
 ];
 
-// ---- DOM ----
-const grid = document.getElementById("horseGrid");
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-const clearFiltersBtn = document.getElementById("clearFilters");
-
-const countAll = document.getElementById("countAll");
-const countShown = document.getElementById("countShown");
-
-const rarityChecks = Array.from(document.querySelectorAll(".rarityCheck"));
-const distanceChecks = Array.from(document.querySelectorAll(".distanceCheck"));
-
-const filtersToggle = document.getElementById("filtersToggle");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
-
-const sidebar = document.querySelector(".sidebar"); // <--- add this
-
-sidebar.addEventListener("click", (e) => {
-  e.stopPropagation();
-});
-
-// Modal
-const addHorseBtn = document.getElementById("addHorseBtn");
-const modalBackdrop = document.getElementById("modalBackdrop");
-const closeModal = document.getElementById("closeModal");
-const closeModal2 = document.getElementById("closeModal2");
-
-// Theme
-const themeToggle = document.getElementById("themeToggle");
-
-// ---- State ----
 let state = {
   q: "",
   sort: "name-asc",
   rarities: new Set(["1", "2", "3"]),
-  distances: new Set(["Sprint", "Mile", "Middle", "Long"])
+  distances: new Set(["Sprint", "Mile", "Medium", "Long"])
 };
 
-// ---- Helpers ----
-function rarityStars(n){
-  return "★".repeat(n);
-}
+// ---- Favorite Storage Helpers ----
+const getFavorites = () => JSON.parse(localStorage.getItem("mambo_favs") || "[]");
+const saveFavorites = (favs) => localStorage.setItem("mambo_favs", JSON.stringify(favs));
 
-function initials(name){
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(s => s[0].toUpperCase())
-    .join("");
-}
-
-function compareBy(sortKey){
-  switch(sortKey){
-    case "name-desc":
-      return (a,b) => b.name.localeCompare(a.name);
-    case "rarity-desc":
-      return (a,b) => b.rarity - a.rarity || a.name.localeCompare(b.name);
-    case "rarity-asc":
-      return (a,b) => a.rarity - b.rarity || a.name.localeCompare(b.name);
-    case "name-asc":
-    default:
-      return (a,b) => a.name.localeCompare(b.name);
+// ---- Core Logic Function ----
+async function init() {
+  const headerContainer = document.getElementById("mainHeader");
+  if (headerContainer) {
+    const response = await fetch("header.html");
+    const html = await response.text();
+    headerContainer.innerHTML = html;
   }
-}
 
-function matchesFilters(h){
-  const q = state.q.trim().toLowerCase();
-  const qMatch = !q || h.name.toLowerCase().includes(q);
+  const grid = document.getElementById("horseGrid");
+  const searchInput = document.getElementById("searchInput");
+  const sortSelect = document.getElementById("sortSelect");
+  const countAll = document.getElementById("countAll");
+  const countShown = document.getElementById("countShown");
+  const rarityChecks = Array.from(document.querySelectorAll(".rarityCheck"));
+  const distanceChecks = Array.from(document.querySelectorAll(".distanceCheck"));
+  const filtersToggle = document.getElementById("filtersToggle");
+  const sidebarOverlay = document.getElementById("sidebarOverlay");
+  const themeToggle = document.getElementById("themeToggle");
+  //const addHorseBtn = document.getElementById("addHorseBtn");
+  const modalBackdrop = document.getElementById("modalBackdrop");
+  const closeModal = document.getElementById("closeModal");
+  const closeModal2 = document.getElementById("closeModal2");
 
-  const rarityMatch = state.rarities.has(String(h.rarity));
-  const distanceMatch = state.distances.has(h.distance);
+  const rarityStars = (n) => "★".repeat(n);
+  const initials = (name) => name.split(" ").filter(Boolean).slice(0, 2).map(s => s[0].toUpperCase()).join("");
 
-  return qMatch && rarityMatch && distanceMatch;
-}
+  function render() {
+    const favorites = getFavorites();
+    countAll.textContent = String(horses.length);
 
-function render(){
-  countAll.textContent = String(horses.length);
+    const filtered = horses
+      .filter(h => {
+        const qMatch = !state.q || h.name.toLowerCase().includes(state.q.toLowerCase());
+        return qMatch && state.rarities.has(String(h.rarity)) && state.distances.has(h.distance);
+      })
+      .sort((a, b) => {
+        if (state.sort === "name-desc") return b.name.localeCompare(a.name);
+        if (state.sort === "rarity-desc") return b.rarity - a.rarity || a.name.localeCompare(b.name);
+        if (state.sort === "rarity-asc") return a.rarity - b.rarity || a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name);
+      });
 
-  const filtered = horses
-    .filter(matchesFilters)
-    .sort(compareBy(state.sort));
+    countShown.textContent = String(filtered.length);
 
-  countShown.textContent = String(filtered.length);
+    grid.innerHTML = filtered.map(h => {
+  const isFav = favorites.includes(h.id);
+  const charUrl = `/characters/${h.slug}/${h.slug}.html`;
+  // Construct the image path using the slug
+  const imgUrl = `/characters/${h.slug}/${h.slug}.png`; 
 
-  grid.innerHTML = filtered.map(h => {
-    return `
-      <article class="card" data-id="${h.id}">
-        <div class="avatar" aria-hidden="true">${initials(h.name)}</div>
-
-        <div class="card-body">
-          <div class="card-title">
-            <h3 title="${h.name}">${h.name}</h3>
-            <div class="badges">
-              <span class="badge good">${rarityStars(h.rarity)}</span>
-              <span class="badge">${h.distance}</span>
-            </div>
+  return `
+    <div class="card-container">
+      <a href="${charUrl}" class="card-link">
+        <article class="card">
+          <div class="avatar">
+            <img src="${imgUrl}" alt="${h.name}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
           </div>
-
-          <div class="card-meta">
-            <span>Role: ${h.role}</span>
-            <span>•</span>
-            <span>ID: ${h.id}</span>
-          </div>
-
-          <div class="card-actions">
-            <button class="icon-btn viewBtn" type="button">View</button>
-            <button class="icon-btn favBtn" type="button">☆ Favorite</button>
-          </div>
+          <div class="card-body">
+            ...
+                <div class="card-title">
+                  <h3>${h.name}</h3>
+                  <div class="badges">
+                    <span class="badge good">${rarityStars(h.rarity)}</span>
+                    <span class="badge">${h.distance}</span>
+                  </div>
+                </div>
+                <div class="card-meta">
+                  <span>Role: ${h.role}</span> • <span>Distance: ${h.distance}</span>  • <span>Distance: ${h.track}</span>
+                </div>
+                <div class="card-actions">
+                   <span class="btn-fake">View Details</span>
+                </div>
+              </div>
+            </article>
+          </a>
+          <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${h.id}" aria-label="Favorite">
+            ${isFav ? '★' : '☆'}
+          </button>
         </div>
-      </article>
-    `;
-  }).join("");
+      `;
+    }).join("");
 
-  // attach listeners to new buttons
-  grid.querySelectorAll(".viewBtn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = e.target.closest(".card");
-      const id = Number(card.dataset.id);
-      const horse = horses.find(x => x.id === id);
-      alert(`Placeholder: open detail page for ${horse.name}\n\nLater: navigate to /horse.html?id=${id}`);
+    // Re-attach Favorite Click Listeners
+    grid.querySelectorAll(".fav-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault(); // Stop link navigation
+        e.stopPropagation(); // Stop event bubbling
+        const id = parseInt(btn.dataset.id);
+        let currentFavs = getFavorites();
+        
+        if (currentFavs.includes(id)) {
+          currentFavs = currentFavs.filter(favId => favId !== id);
+        } else {
+          currentFavs.push(id);
+        }
+        
+        saveFavorites(currentFavs);
+        render(); // Refresh the grid to show new star state
+      });
+    });
+  }
+
+  // ---- Event Listeners ----
+  searchInput.addEventListener("input", (e) => { state.q = e.target.value; render(); });
+  sortSelect.addEventListener("change", (e) => { state.sort = e.target.value; render(); });
+
+  [...rarityChecks, ...distanceChecks].forEach(chk => {
+    chk.addEventListener("change", () => {
+      const set = chk.classList.contains("rarityCheck") ? state.rarities : state.distances;
+      chk.checked ? set.add(chk.value) : set.delete(chk.value);
+      render();
     });
   });
 
-  grid.querySelectorAll(".favBtn").forEach(btn => {
-    btn.addEventListener("click", () => alert("Placeholder: add to favorites"));
-  });
-}
+  themeToggle.addEventListener("click", () => document.documentElement.classList.toggle("light"));
 
-// ---- Events ----
-searchInput.addEventListener("input", (e) => {
-  state.q = e.target.value;
-  render();
-});
+  const isMobile = () => window.matchMedia("(max-width: 980px)").matches;
+  const toggleFilters = () => {
+    const isOpen = document.body.classList.toggle("filters-open");
+    if (isOpen && isMobile()) {
+      sidebarOverlay.classList.remove("hidden");
+    } else {
+      sidebarOverlay.classList.add("hidden");
+    }
+  };
 
-sortSelect.addEventListener("change", (e) => {
-  state.sort = e.target.value;
-  render();
-});
+  filtersToggle.addEventListener("click", toggleFilters);
+  sidebarOverlay.addEventListener("click", toggleFilters);
 
-rarityChecks.forEach(chk => {
-  chk.addEventListener("change", () => {
-    if (chk.checked) state.rarities.add(chk.value);
-    else state.rarities.delete(chk.value);
-    render();
-  });
-});
-
-distanceChecks.forEach(chk => {
-  chk.addEventListener("change", () => {
-    if (chk.checked) state.distances.add(chk.value);
-    else state.distances.delete(chk.value);
-    render();
-  });
-});
-
-clearFiltersBtn.addEventListener("click", () => {
-  // reset state
-  state.q = "";
-  state.sort = "name-asc";
-  state.rarities = new Set(["1", "2", "3"]);
-  state.distances = new Set(["Sprint", "Mile", "Middle", "Long"]);
-
-  // reset UI
-  searchInput.value = "";
-  sortSelect.value = "name-asc";
-  rarityChecks.forEach(c => c.checked = true);
-  distanceChecks.forEach(c => c.checked = true);
+  //addHorseBtn.addEventListener("click", () => modalBackdrop.classList.remove("hidden"));
+  [closeModal, closeModal2].forEach(b => b.addEventListener("click", () => modalBackdrop.classList.add("hidden")));
 
   render();
-});
-
-// Modal open/close
-function openModal(){
-  modalBackdrop.classList.remove("hidden");
-  modalBackdrop.setAttribute("aria-hidden", "false");
-}
-function closeModalFn(){
-  modalBackdrop.classList.add("hidden");
-  modalBackdrop.setAttribute("aria-hidden", "true");
 }
 
-addHorseBtn.addEventListener("click", openModal);
-closeModal.addEventListener("click", closeModalFn);
-closeModal2.addEventListener("click", closeModalFn);
-modalBackdrop.addEventListener("click", (e) => {
-  if (e.target === modalBackdrop) closeModalFn();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModalFn();
-});
-
-// Theme toggle (simple)
-themeToggle.addEventListener("click", () => {
-  document.documentElement.classList.toggle("light");
-});
-function setDefaultFiltersState() {
-  const isMobile = window.matchMedia("(max-width: 980px)").matches;
-
-  // Desktop default: open. Mobile default: closed.
-  if (isMobile) document.body.classList.remove("filters-open");
-  else document.body.classList.add("filters-open");
-}
-
-function isMobile() {
-  return window.matchMedia("(max-width: 980px)").matches;
-}
-
-function closeFilters() {
-  document.body.classList.remove("filters-open");
-  sidebarOverlay.classList.add("hidden");
-  sidebarOverlay.setAttribute("aria-hidden", "true");
-}
-
-function openFilters() {
-  document.body.classList.add("filters-open");
-
-  // Only show overlay on mobile
-  if (isMobile()) {
-    sidebarOverlay.classList.remove("hidden");
-    sidebarOverlay.setAttribute("aria-hidden", "false");
-  } else {
-    sidebarOverlay.classList.add("hidden");
-    sidebarOverlay.setAttribute("aria-hidden", "true");
-  }
-}
-
-function toggleFilters() {
-  const isOpen = document.body.classList.contains("filters-open");
-  if (isOpen) closeFilters();
-  else openFilters();
-}
-
-filtersToggle.addEventListener("click", toggleFilters);
-sidebarOverlay.addEventListener("click", closeFilters);
-
-window.addEventListener("resize", () => {
-  // on resize, re-apply default rules and keep overlay correct
-  setDefaultFiltersState();
-  const isOpen = document.body.classList.contains("filters-open");
-  if (isOpen && window.matchMedia("(max-width: 980px)").matches) openFilters();
-  else closeFilters();
-});
-
-// run on load
-setDefaultFiltersState();
-closeFilters(); // ensures overlay starts hidden
-
-
-// ---- Init ----
-render();
+init();
