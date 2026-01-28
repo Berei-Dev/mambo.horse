@@ -18,6 +18,8 @@
         <label class="field">
           <span class="field-label">Sort by</span>
           <select id="sortSelect">
+            <option value="id-desc">Newest</option>
+            <option value="id-asc">Oldest</option>
             <option value="name-asc">Name (A → Z)</option>
             <option value="name-desc">Name (Z → A)</option>
             <option value="rarity-desc">Rarity (High → Low)</option>
@@ -38,8 +40,24 @@
           <div class="chips">
             <label class="chip"><input type="checkbox" value="Sprint" class="distanceCheck" checked /><span>Sprint</span></label>
             <label class="chip"><input type="checkbox" value="Mile" class="distanceCheck" checked /><span>Mile</span></label>
-            <label class="chip"><input type="checkbox" value="Middle" class="distanceCheck" checked /><span>Middle</span></label>
+            <label class="chip"><input type="checkbox" value="Medium" class="distanceCheck" checked /><span>Middle</span></label>
             <label class="chip"><input type="checkbox" value="Long" class="distanceCheck" checked /><span>Long</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label">Role</span>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" value="Front" class="roleCheck" checked /><span>Front</span></label>
+            <label class="chip"><input type="checkbox" value="Pace" class="roleCheck" checked /><span>Pace</span></label>
+            <label class="chip"><input type="checkbox" value="Late" class="roleCheck" checked /><span>Late</span></label>
+            <label class="chip"><input type="checkbox" value="End" class="roleCheck" checked /><span>End</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label">Role</span>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" value="Turf" class="trackCheck" checked /><span>Turf</span></label>
+            <label class="chip"><input type="checkbox" value="Dirt" class="trackCheck" checked /><span>Dirt</span></label>
           </div>
         </div>
         <button id="clearFilters" class="btn ghost full" type="button">Clear Filters</button>
