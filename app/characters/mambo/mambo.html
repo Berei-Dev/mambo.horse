@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mambo</title>
-    <link rel="stylesheet" href="mambo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+  <link rel="stylesheet" href="mambo.css" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-    <h1>Character: mambo</h1>
+
+  <header id="mainHeader" class="navbar"></header>
+
+  <main class="page">
+    <div id="gifContainer" style="position: fixed; inset: 0; pointer-events: none; z-index: 99; overflow: hidden;"></div>
+
+<audio id="mamboClickAudio" src="mambo.mp3"></audio>
+
+    <audio id="mamboAudio" autoplay loop muted>
+  <source src="mambo_background.mp3" type="audio/mpeg">
+</audio>
+  </main>
+
+  <script src="mambo.js"></script>
 </body>
 </html>
