@@ -40,7 +40,7 @@ body {
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -158,6 +158,7 @@ body {
   padding: 16px;
   max-width: 1280px;
   margin: 0 auto;
+  z-index: 0;
 }
 
 .sidebar {
@@ -170,6 +171,7 @@ body {
 
 .content {
   min-height: calc(100vh - 92px);
+  z-index: 0;
 }
 
 /* Specific styling for Distance Badges (Blue/Cyan theme) */
@@ -373,7 +375,7 @@ body {
   justify-content: center;
   background: rgba(0, 0, 0, .55);
   padding: 16px;
-  z-index: 100;
+  z-index: 80;
 }
 
 .hidden { display: none; }
@@ -395,6 +397,7 @@ body {
   z-index: 70;
 }
 
+
 body:not(.filters-open) .page { grid-template-columns: 1fr; }
 body:not(.filters-open) .sidebar { display: none; }
 
@@ -409,4 +412,91 @@ body:not(.filters-open) .sidebar { display: none; }
     z-index: 80;
   }
   body.filters-open .overlay { display: block; }
+}
+
+/* --- HAMBURGER & MOBILE DRAWER --- */
+.hamburger-btn {
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1000;
+}
+
+.hamburger-btn span {
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 10px;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: -100%; /* Start off-screen */
+  width: 280px;
+  height: 1000px;
+  background: var(--panel);
+  z-index: 999;
+  transition: left 0.3s ease;
+  padding: 80px 20px;
+  box-shadow: var(--shadow);
+  border-right: 1px solid var(--border);
+}
+
+body.menu-open {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mobile-drawer.open {
+  left: 0;
+}
+
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mobile-nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.mobile-nav-links a.active {
+  background: color-mix(in oklab, var(--accent) 15%, var(--panel));
+  color: var(--accent);
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 90;
+  display: none;
+}
+
+.mobile-menu-overlay.show {
+  display: block;
+}
+
+/* --- MOBILE OVERRIDES --- */
+@media (max-width: 980px) {
+  .hamburger-btn {
+    display: flex; /* Show on mobile */
+  }
+
+  .nav-left {
+    gap: 8px; /* Tighten gap for mobile */
+  }
 }
