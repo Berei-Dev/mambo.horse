@@ -63,11 +63,11 @@ function attachHeaderListeners() {
 
 // ---- Teio Data & Rendering ----
 const teioStats = {
-  speed: "1200",
-  stamina: "800",
-  power: "1000",
-  guts: "400",
-  wisdom: "600"
+  speed: "90",
+  stamina: "89",
+  power: "83",
+  guts: "92",
+  wit: "96"
 };
 
 const renderStats = () => {
@@ -76,7 +76,7 @@ const renderStats = () => {
     document.getElementById("statStamina").textContent = teioStats.stamina;
     document.getElementById("statPower").textContent = teioStats.power;
     document.getElementById("statGuts").textContent = teioStats.guts;
-    document.getElementById("statWisdom").textContent = teioStats.wisdom;
+    document.getElementById("statWit").textContent = teioStats.wit;
   }
 };
 
