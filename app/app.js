@@ -11,7 +11,7 @@ const horses = [
   { id: 5.01, name: "Oguri Cap (Christmas)", slug: "oguri_cap", rarity: 3, distance: ["Mile", "Medium"], role: ["Pace", "Late"], track: "Both" },
   { id: 6, name: "Gold Ship", slug: "gold_ship", rarity: 2, distance: ["Medium", "Long"], role: ["End"], track: "Turf"},
   { id: 7, name: "Vodka", slug: "vodka", rarity: 2, distance: ["Mile", "Medium"], role: ["Late"], track: "Turf"},
-  { id: 8, name: "Daiwa Scarlet", slug: "daiwa scarlet", rarity: 2, distance: ["Mile", "Medium"], role: ["Front", "Pace"], track: "Turf"},
+  { id: 8, name: "Daiwa Scarlet", slug: "daiwa_scarlet", rarity: 2, distance: ["Mile", "Medium"], role: ["Front", "Pace"], track: "Turf"},
   { id: 9, name: "Taiki Shuttle", slug: "taiki_shuttle", rarity: 3, distance: ["Sprint", "Mile"], role: ["Pace"], track: "Both"},
   { id: 10, name: "Grass Wonder", slug: "grass_wonder", rarity: 2, distance: ["Mile", "Long"], role: ["Pace", "Late"], track: "Turf"},
   { id: 10.01, name: "Grass Wonder (Fantasy)", slug: "grass_wonder", rarity: 3, distance: ["Mile", "Long"], role: ["Pace", "Late"], track: "Turf"},
@@ -60,16 +60,17 @@ const horses = [
   { id: 43, name: "Tosen Jordan", slug: "tosen_jordan", rarity: 3, distance: ["Medium"], role: ["Pace"], track: "Turf"},
   { id: 44, name: "Mejiro Dober", slug: "mejiro_dober", rarity: 3, distance: ["Mile", "Medium"], role: ["Late"], track: "Turf"},
   { id: 45, name: "Fine Motion", slug: "fine_motion", rarity: 3, distance: ["Mile", "Medium"], role: ["Pace"], track: "Turf"},
-  { id: 46, name: "Tamamo Cross", slug: "tamamo_cross", rarity: 3, distance: ["Medium", "Long"], role: ["Pace", "Late", "End"], track: "Turf"}
+  { id: 46, name: "Tamamo Cross", slug: "tamamo_cross", rarity: 3, distance: ["Medium", "Long"], role: ["Pace", "Late", "End"], track: "Turf"},
+  { id:47, name: "Mambo", slug: "mambo", rarity: 1, distance: ["Mambo"], role: ["Mambo"], track: "Mambo"}
 ];
 
 let state = {
   q: "",
   sort: "id-desc",
   rarities: new Set(["1", "2", "3"]),
-  distances: new Set(["Sprint", "Mile", "Medium", "Long"]),
-  role: new Set(["Front", "Pace", "Late", "End"]),
-  track: new Set(["Turf", "Dirt"])
+  distances: new Set(["Sprint", "Mile", "Medium", "Long", "Mambo"]),
+  role: new Set(["Front", "Pace", "Late", "End", "Mambo"]),
+  track: new Set(["Turf", "Dirt", "Mambo"])
 };
 
 // ---- Favorite Storage Helpers ----
@@ -149,13 +150,17 @@ function render() {
     const charUrl = `/characters/${h.slug}/${h.slug}.html`;
     const imgUrl = `/characters/${h.slug}/${h.slug}.png`; 
 
-    // Generate Distance Badges
-    const distanceArray = Array.isArray(h.distance) ? h.distance : [h.distance];
-    const distanceBadges = distanceArray.map(dist => `<span class="badge">${dist}</span>`).join("");
+// Generate Distance Badges - Added 'distance-badge' class
+const distanceArray = Array.isArray(h.distance) ? h.distance : [h.distance];
+const distanceBadges = distanceArray
+  .map(dist => `<span class="badge distance-badge">${dist}</span>`)
+  .join("");
 
-    // Generate Role Badges
-    const roleArray = Array.isArray(h.role) ? h.role : [h.role];
-    const roleBadges = roleArray.map(role => `<span class="badge role-badge">${role}</span>`).join("");
+// Generate Role Badges - Already has 'role-badge' class
+const roleArray = Array.isArray(h.role) ? h.role : [h.role];
+const roleBadges = roleArray
+  .map(role => `<span class="badge role-badge">${role}</span>`)
+  .join("");
 
     return `
       <div class="card-container">

@@ -172,6 +172,20 @@ body {
   min-height: calc(100vh - 92px);
 }
 
+/* Specific styling for Distance Badges (Blue/Cyan theme) */
+.badge.distance-badge {
+  color: #06b6d4;
+  border-color: color-mix(in oklab, #06b6d4 30%, var(--border));
+  background: color-mix(in oklab, #06b6d4 10%, transparent);
+}
+
+/* Specific styling for Role Badges (Purple theme) */
+.badge.role-badge {
+  color: #a78bfa;
+  border-color: color-mix(in oklab, #a78bfa 30%, var(--border));
+  background: color-mix(in oklab, #a78bfa 10%, transparent);
+}
+
 /* --- MOBILE STYLES --- */
 @media (max-width: 980px) {
   .brand-text {
