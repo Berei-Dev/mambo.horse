@@ -278,6 +278,17 @@ body{
   padding: 14px 4px 26px;
 }
 
+.flying-gif {
+  /* Prevent images from being dragged or selected */
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+  transition: filter 0.2s;
+}
+
+.flying-gif:hover {
+  filter: brightness(1.2) drop-shadow(0 0 10px var(--accent));
+}
 /* Responsive: stack facts + image like a single column */
 @media (max-width: 900px){
   .top-split{
