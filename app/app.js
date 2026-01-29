@@ -234,6 +234,35 @@ const roleBadges = roleArray
   });
 });
 
+// MOBILE MENU CLASS!
+let scrollY = 0;
+
+const openMenu = () => {
+  scrollY = window.scrollY;
+  document.body.classList.add("menu-open");
+  document.body.style.top = `-${scrollY}px`;
+};
+
+const closeMenu = () => {
+  document.body.classList.remove("menu-open");
+  document.body.style.top = "";
+  window.scrollTo(0, scrollY);
+};
+
+mobileMenuBtn.addEventListener("click", () => {
+  const isOpen = mobileDrawer.classList.toggle("open");
+  mobileMenuOverlay.classList.toggle("show");
+
+  isOpen ? openMenu() : closeMenu();
+});
+
+mobileMenuOverlay.addEventListener("click", () => {
+  mobileDrawer.classList.remove("open");
+  mobileMenuOverlay.classList.remove("show");
+  closeMenu();
+});
+
+
   themeToggle.addEventListener("click", () => document.documentElement.classList.toggle("light"));
 
   const isMobile = () => window.matchMedia("(max-width: 980px)").matches;
