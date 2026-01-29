@@ -1,6 +1,290 @@
-/* Styles for manhattan_cafe */
-body {
-    background-color: #0b0d12;
-    color: white;
-    font-family: sans-serif;
+:root{
+  --bg: #0b0d12;
+  --panel: #111623;
+  --panel-2: #0f1320;
+  --text: #e9edf6;
+  --muted: #9aa4b2;
+  --border: rgba(255,255,255,.08);
+  --accent: #8b5cf6;
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+}
+
+:root.light{
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --panel-2: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: rgba(17,24,39,.12);
+  --shadow: 0 12px 30px rgba(17,24,39,.12);
+}
+
+*{ box-sizing: border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* NAVBAR */
+.navbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg) 75%, black 25%);
+  backdrop-filter: blur(10px);
+}
+
+.nav-left, .nav-right{
+  display:flex;
+  align-items:center;
+  gap: 16px;
+}
+
+.nav-links{
+  display:flex;
+  gap: 10px;
+}
+
+.nav-links a{
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration:none;
+  color: var(--muted);
+  border: 1px solid transparent;
+}
+
+.nav-links a:hover{
+  color: var(--text);
+  border-color: var(--border);
+  background: color-mix(in oklab, var(--panel) 70%, transparent);
+}
+
+.nav-links a.active{
+  color: var(--text);
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+  background: color-mix(in oklab, var(--accent) 14%, var(--panel));
+}
+
+.btn{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--accent) 18%, var(--panel));
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn:hover{
+  border-color: color-mix(in oklab, var(--accent) 65%, var(--border));
+  transform: translateY(-1px);
+}
+
+.btn.ghost{ background: transparent; }
+
+/* PAGE */
+.page{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.panel{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.hero{
+  padding: 22px;
+}
+
+/* HORSE NAME (top, like whiteboard) */
+.horse-name{
+  margin: 0 0 16px;
+  font-size: 34px;
+}
+
+/* TOP SPLIT (facts left, image right) */
+.top-split{
+  display:grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.section-title{
+  margin: 0 0 10px;
+  font-size: 14px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.center{ text-align:center; }
+
+.muted{
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+
+.facts{
+  padding-right: 6px;
+}
+
+.facts-list{
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.facts-list li{
+  margin: 6px 0;
+  color: color-mix(in oklab, var(--text) 85%, var(--muted));
+}
+
+/* IMAGE AREA */
+.image-area{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.img-frame{
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow:hidden;
+  background: color-mix(in oklab, var(--panel-2) 70%, transparent);
+  min-height: 260px;
+  display:grid;
+  place-items:center;
+}
+
+.img-frame img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+
+.img-placeholder{
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  display:grid;
+  place-items:center;
+  gap: 10px;
+  padding: 18px;
+}
+
+.ph-badge{
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display:grid;
+  place-items:center;
+  font-weight: 900;
+  font-size: 22px;
+  background: linear-gradient(135deg, var(--accent), #06b6d4);
+}
+
+/* STATS (centered row with boxes) */
+.stats-block{
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 10px;
+}
+
+.stats-row{
+  display:flex;
+  justify-content:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.stat{
+  width: 120px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align:center;
+  background: color-mix(in oklab, var(--panel-2) 70%, transparent);
+}
+
+.stat-label{
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.stat-value{
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* SKILLS (centered block under stats) */
+.skills-block{
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.skills-wrap{
+  margin-top: 10px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.skills-col{
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: color-mix(in oklab, var(--panel-2) 70%, transparent);
+}
+
+.skills-subtitle{
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.skills-list{
+  margin: 0;
+  padding-left: 18px;
+  color: color-mix(in oklab, var(--text) 85%, var(--muted));
+}
+
+.skills-list li{
+  margin: 7px 0;
+}
+
+.footer{
+  padding: 14px 4px 26px;
+}
+
+/* Responsive: stack facts + image like a single column */
+@media (max-width: 900px){
+  .top-split{
+    grid-template-columns: 1fr;
+  }
+  .skills-wrap{
+    grid-template-columns: 1fr;
+  }
+  .nav-links{ display:none; }
 }
