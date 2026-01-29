@@ -59,6 +59,34 @@ function attachHeaderListeners() {
       sidebarOverlay.classList.add("hidden");
     });
   }
+  // MOBILE MENU CLASS!
+let scrollY = 0;
+
+const openMenu = () => {
+  scrollY = window.scrollY;
+  document.body.classList.add("menu-open");
+  document.body.style.top = `-${scrollY}px`;
+};
+
+const closeMenu = () => {
+  document.body.classList.remove("menu-open");
+  document.body.style.top = "";
+  window.scrollTo(0, scrollY);
+};
+
+mobileMenuBtn.addEventListener("click", () => {
+  const isOpen = mobileDrawer.classList.toggle("open");
+  mobileMenuOverlay.classList.toggle("show");
+
+  isOpen ? openMenu() : closeMenu();
+});
+
+mobileMenuOverlay.addEventListener("click", () => {
+  mobileDrawer.classList.remove("open");
+  mobileMenuOverlay.classList.remove("show");
+  closeMenu();
+});
+
 }
 
 // ---- Teio Data & Rendering ----
