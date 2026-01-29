@@ -59,15 +59,43 @@ function attachHeaderListeners() {
       sidebarOverlay.classList.add("hidden");
     });
   }
+  // MOBILE MENU CLASS!
+let scrollY = 0;
+
+const openMenu = () => {
+  scrollY = window.scrollY;
+  document.body.classList.add("menu-open");
+  document.body.style.top = `-${scrollY}px`;
+};
+
+const closeMenu = () => {
+  document.body.classList.remove("menu-open");
+  document.body.style.top = "";
+  window.scrollTo(0, scrollY);
+};
+
+mobileMenuBtn.addEventListener("click", () => {
+  const isOpen = mobileDrawer.classList.toggle("open");
+  mobileMenuOverlay.classList.toggle("show");
+
+  isOpen ? openMenu() : closeMenu();
+});
+
+mobileMenuOverlay.addEventListener("click", () => {
+  mobileDrawer.classList.remove("open");
+  mobileMenuOverlay.classList.remove("show");
+  closeMenu();
+});
+
 }
 
 // ---- Teio Data & Rendering ----
 const teioStats = {
-  speed: "1200",
-  stamina: "800",
-  power: "1000",
-  guts: "400",
-  wisdom: "600"
+  speed: "90",
+  stamina: "89",
+  power: "83",
+  guts: "92",
+  wit: "96"
 };
 
 const renderStats = () => {
@@ -76,7 +104,7 @@ const renderStats = () => {
     document.getElementById("statStamina").textContent = teioStats.stamina;
     document.getElementById("statPower").textContent = teioStats.power;
     document.getElementById("statGuts").textContent = teioStats.guts;
-    document.getElementById("statWisdom").textContent = teioStats.wisdom;
+    document.getElementById("statWit").textContent = teioStats.wit;
   }
 };
 
