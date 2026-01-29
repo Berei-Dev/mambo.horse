@@ -1,12 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>biwa_hayahide</title>
-    <link rel="stylesheet" href="biwa_hayahide.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokai Teio — Uma Musume Index</title>
+
+  <!-- IMPORTANT: these paths are relative to Teio/Teio.html -->
+  <link rel="stylesheet" href="biwa_hayahide.css" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
+
 <body>
-    <h1>Character: biwa_hayahide</h1>
+<header id="mainHeader" class="navbar"></header>
+
+  <main class="page">
+    <section class="panel hero">
+      <h1 class="horse-name">Tokai Teio</h1>
+
+      <div class="top-split">
+        <div class="facts">
+          <h2 class="section-title">Facts</h2>
+
+          <p class="muted">
+            Tokai Teio was nicknamed the "Miracle Horse" and "Son of the Emperor", 
+            known for his incredible 1993 Arima Kinen comeback after three fractures.
+            Tokai Teio was oringinally going to be named Hamano Teio.
+          </p>
+
+          <ul class="facts-list">
+            <li><strong>Type:</strong> Uma Musume</li>
+            <li><strong>Distance:</strong> Medium</li>
+            <li><strong>Style:</strong> Pace</li>
+            <li><strong>Notable:</strong> Placeholder fact</li>
+          </ul>
+        </div>
+
+        <div class="image-area">
+          <h2 class="section-title">Picture</h2>
+
+          <div class="img-frame">
+            <img
+              src="biwa_hayahide.png"
+              alt="Tokai Teio"
+              onerror="this.style.display='none'; document.getElementById('imgFallback').style.display='grid';"
+            />
+            <div id="imgFallback" class="img-placeholder" style="display:none;">
+              <div class="ph-badge">TT</div>
+              <div class="muted">Put an image in <code>Teio/teio.png</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-block">
+        <h2 class="section-title center">Base Stats</h2>
+
+        <div class="stats-row">
+          <div class="stat"><div class="stat-label">Speed</div><div class="stat-value" id="statSpeed">??</div></div>
+          <div class="stat"><div class="stat-label">Stamina</div><div class="stat-value" id="statStamina">??</div></div>
+          <div class="stat"><div class="stat-label">Power</div><div class="stat-value" id="statPower">??</div></div>
+          <div class="stat"><div class="stat-label">Guts</div><div class="stat-value" id="statGuts">??</div></div>
+          <div class="stat"><div class="stat-label">Wit</div><div class="stat-value" id="statWit">??</div></div>
+        </div>
+      </div>
+
+      <div class="skills-block">
+        <h2 class="section-title center">Skills</h2>
+
+        <div class="skills-wrap">
+          <div class="skills-col">
+            <h3 class="skills-subtitle">Starts With</h3>
+            <ul id="startsWithList" class="skills-list">
+              <li><strong>Sky-High Teio Step</strong></li>
+            </ul>
+          </div>
+
+          <div class="skills-col">
+            <h3 class="skills-subtitle">Can Learn</h3>
+            <ul id="canLearnList" class="skills-list"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="muted">Uma Musume Index — Tokai Teio template</span>
+    </footer>
+  </main>
+
+  <!-- IMPORTANT: relative to Teio/Teio.html -->
+  <script src="biwa_hayahide.js"></script>
 </body>
 </html>
